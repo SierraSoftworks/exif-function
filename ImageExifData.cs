@@ -15,7 +15,7 @@ namespace exif_function
     {
         [FunctionName("ImageExifData")]
         public static IActionResult Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "v1/exifdata")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v1/exifdata")] HttpRequest req,
             ILogger log)
         {
             var metadata = ExifHelper.GetMetadata(req.Body);

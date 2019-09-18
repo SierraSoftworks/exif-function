@@ -15,7 +15,7 @@ namespace exif_function
     {
         [FunctionName("ImageFilename")]
         public static IActionResult Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "v1/name")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v1/name")] HttpRequest req,
             ILogger log)
         {
             var filename = (string)req.Query["filename"];
