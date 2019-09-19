@@ -3,11 +3,6 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using ImageMagick;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using System.Linq;
-using System.Text;
 
 namespace exif_function
 {

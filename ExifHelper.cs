@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using ImageMagick;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 using Newtonsoft.Json;
 
 namespace exif_function
@@ -15,9 +16,9 @@ namespace exif_function
 
             try
             {
-                using (var image = new MagickImage(imageStream))
+                using (var image = Image.Load(imageStream))
                 {
-                    var exif = image.GetExifProfile();
+                    var exif = image.Metadata.ExifProfile;
 
                     if (exif == null)
                         return null;
@@ -39,22 +40,22 @@ namespace exif_function
 
                         switch (value.DataType)
                         {
-                            case ExifDataType.String:
+                            case ExifDataType.Ascii:
                                 metadata[value.Tag.ToString()] = (string)value.Value;
                                 break;
                             case ExifDataType.Rational:
                                 {
-                                    if (value.Value is Rational rat)
+                                    if (value.Value is double rat)
                                         metadata[value.Tag.ToString()] = rat.ToString();
-                                    else if (value.Value is Rational[] rata)
+                                    else if (value.Value is double[] rata)
                                         metadata[value.Tag.ToString()] = string.Join(", ", rata.Select(r => r.ToString()));
                                     break;
                                 }
                             case ExifDataType.SignedRational:
                                 {
-                                    if (value.Value is SignedRational rat)
+                                    if (value.Value is double rat)
                                         metadata[value.Tag.ToString()] = rat.ToString();
-                                    else if (value.Value is SignedRational[] rata)
+                                    else if (value.Value is double[] rata)
                                         metadata[value.Tag.ToString()] = string.Join(", ", rata.Select(r => r.ToString()));
                                     break;
                                 }
@@ -69,11 +70,11 @@ namespace exif_function
                     return metadata;
                 }
             }
-            catch (MagickWarningException)
+            catch (ImageFormatException)
             {
                 return null;
             }
-            catch (MagickErrorException)
+            catch (ImageProcessingException)
             {
                 return null;
             }
