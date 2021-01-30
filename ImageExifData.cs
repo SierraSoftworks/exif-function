@@ -4,7 +4,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace exif_function
+namespace EXIF
 {
     public static class ImageExifData
     {

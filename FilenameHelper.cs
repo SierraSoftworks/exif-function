@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace exif_function
+namespace EXIF
 {
     public static class FilenameHelper
     {

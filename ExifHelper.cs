@@ -7,7 +7,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 using Newtonsoft.Json;
 
-namespace exif_function
+namespace EXIF
 {
     public static class ExifHelper
     {
@@ -26,41 +26,38 @@ namespace exif_function
                     var metadata = new Dictionary<string, string>();
                     foreach (var value in exif.Values)
                     {
-                        switch (value.Tag)
+                        if (value.Tag == ExifTag.DateTime)
                         {
-                            case ExifTag.DateTime:
-                                {
-                                    var dateTime = DateTime.ParseExact(value.Value.ToString(), "yyyy:MM:dd HH:mm:ss", CultureInfo.InvariantCulture);
-                                    metadata["DateTime"] = dateTime.ToString("yyyy-MM-ddTHH-mm-ss");
-                                    metadata["Date"] = dateTime.ToString("yyyy-MM-dd");
-                                    metadata["Time"] = dateTime.ToString("HH-mm-ss");
-                                    continue;
-                                }
+                            var dateTime = DateTime.ParseExact(value.GetValue().ToString(), "yyyy:MM:dd HH:mm:ss", CultureInfo.InvariantCulture);
+                            metadata["DateTime"] = dateTime.ToString("yyyy-MM-ddTHH-mm-ss");
+                            metadata["Date"] = dateTime.ToString("yyyy-MM-dd");
+                            metadata["Time"] = dateTime.ToString("HH-mm-ss");
+                            continue;
                         }
 
                         switch (value.DataType)
                         {
                             case ExifDataType.Ascii:
-                                metadata[value.Tag.ToString()] = (string)value.Value;
+                                metadata[value.Tag.ToString()] = (string)value.GetValue();
                                 break;
                             case ExifDataType.Rational:
                                 {
-                                    if (value.Value is double rat)
+                                    if (value.GetValue() is double rat)
                                         metadata[value.Tag.ToString()] = rat.ToString();
-                                    else if (value.Value is double[] rata)
+                                    else if (value.GetValue() is double[] rata)
                                         metadata[value.Tag.ToString()] = string.Join(", ", rata.Select(r => r.ToString()));
                                     break;
                                 }
                             case ExifDataType.SignedRational:
                                 {
-                                    if (value.Value is double rat)
+                                    if (value.GetValue() is double rat)
                                         metadata[value.Tag.ToString()] = rat.ToString();
-                                    else if (value.Value is double[] rata)
+                                    else if (value.GetValue() is double[] rata)
                                         metadata[value.Tag.ToString()] = string.Join(", ", rata.Select(r => r.ToString()));
                                     break;
                                 }
                             default:
-                                metadata[value.Tag.ToString()] = JsonConvert.SerializeObject(value.Value).Trim('"');
+                                metadata[value.Tag.ToString()] = JsonConvert.SerializeObject(value.GetValue()).Trim('"');
                                 break;
 
                         }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Scriban;
 
-namespace exif_function
+namespace EXIF
 {
     public static class ImageFilename
     {
